@@ -1,0 +1,19 @@
+.text-field {
+  background-color: var(--color-bg-dark);
+  border: none;
+  color: var(--color-white);
+  font-family: inherit;
+  resize: none;
+  padding: 1rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    font-size: 1.9rem;
+    font-weight: normal;
+  }
+}
