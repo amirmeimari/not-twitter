@@ -1,4 +1,5 @@
 import classes from './Tweet.module.scss'
+import classNames from 'classnames'
 
 import UserAvatar from '../../assets/images/user-avatar.jpg'
 
@@ -8,12 +9,32 @@ import { ReactComponent as CommentIcon } from '../../assets/icons/comment.svg'
 import { ReactComponent as HeartIcon } from '../../assets/icons/heart.svg'
 import { ReactComponent as ShareIcon } from '../../assets/icons/share.svg'
 
-const Tweet = () => {
+const Tweet = ({ reply }) => {
+  const actionsElement = (
+    <nav className={classes['actions-container']}>
+      <ul className={classes.actions}>
+        <li className={classes.action}>
+          <CommentIcon className={classes['action-icon']} />
+        </li>
+        <li className={classes.action}>
+          <HeartIcon className={classes['action-icon']} />
+        </li>
+        <li className={classes.action}>
+          <ShareIcon className={classes['action-icon']} />
+        </li>
+      </ul>
+    </nav>
+  )
+
   return (
-    <section className={classes.tweet}>
+    <section
+      className={classNames(classes.tweet, { [classes['tweet--reply']]: reply })}
+    >
       <figure className={classes.figure}>
         <img className={classes.avatar} src={UserAvatar} alt="amir meimari" />
       </figure>
+
+      {reply ? <div className={classes['reply-connector']} /> : null}
 
       <div className={classes['tweet-info']}>
         <div className={classes['author-info']}>
@@ -33,19 +54,7 @@ const Tweet = () => {
 
       <Divider className={classes.divider} />
 
-      <nav className={classes['actions-container']}>
-        <ul className={classes.actions}>
-          <li className={classes.action}>
-            <CommentIcon className={classes['action-icon']} />
-          </li>
-          <li className={classes.action}>
-            <HeartIcon className={classes['action-icon']} />
-          </li>
-          <li className={classes.action}>
-            <ShareIcon className={classes['action-icon']} />
-          </li>
-        </ul>
-      </nav>
+      {reply ? null : actionsElement}
     </section>
   )
 }

@@ -15,6 +15,16 @@
   }
 }
 
+.tweet--reply {
+  padding-bottom: 0;
+  border-bottom: none;
+  cursor: default;
+
+  &:hover {
+    background-color: var(--color-bg-dark);
+  }
+}
+
 .figure {
   @extend .figure;
 }
@@ -102,4 +112,13 @@
   fill: var(--color-white);
   width: 2rem;
   height: 2rem;
+}
+
+.reply-connector {
+  width: 2px;
+  height: calc(100% + 2rem);
+  background-color: var(--color-grey);
+  grid-column: 1 / 2;
+  grid-row: 2 / -1;
+  margin: 1rem auto 0 auto;
 }
