@@ -1,0 +1,35 @@
+@import '../abstract/mixins';
+
+.container {
+  padding: 1rem var(--space-around);
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  grid-template-rows: 1fr auto;
+  grid-column-gap: 1rem;
+}
+
+.figure {
+  height: 5rem;
+  width: 5rem;
+  background-color: var(--color-grey);
+  border-radius: 50rem;
+  overflow: hidden;
+}
+
+.avatar {
+  width: 100%;
+  height: auto;
+}
+
+// Responsive
+@include respond(xs) {
+  .container {
+    grid-template-columns: 4rem 1fr;
+    grid-column-gap: .5rem;
+  }
+
+  .figure {
+    height: 4rem;
+    width: 4rem;
+  }
+}

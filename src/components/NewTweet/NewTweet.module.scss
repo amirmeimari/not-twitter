@@ -1,25 +1,17 @@
-@import '../../assets//styles/abstract/mixins';
+@import '../../assets/styles/components/tweet';
 
-.container {
-  padding: 1rem var(--space-around);
-  display: grid;
-  grid-template-columns: 5rem 1fr;
-  grid-template-rows: 1fr auto;
-  grid-column-gap: 1rem;
+.tweet {
+  @extend .container;
 }
 
 .figure {
-  height: 5rem;
-  width: 5rem;
-  background-color: var(--color-grey);
-  border-radius: 50rem;
-  overflow: hidden;
+  @extend .figure;
 }
 
 .avatar {
-  width: 100%;
-  height: auto;
+  @extend .avatar;
 }
+
 
 .divider {
   grid-column: 2 / -1;
@@ -30,17 +22,4 @@
   grid-column: 2 / -1;
   max-width: fit-content;
   justify-self: flex-end;
-}
-
-// Responsive
-@include respond(xs) {
-  .container {
-    grid-template-columns: 4rem 1fr;
-    grid-column-gap: .5rem;
-  }
-
-  .figure {
-    height: 4rem;
-    width: 4rem;
-  }
 }
