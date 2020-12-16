@@ -1,0 +1,37 @@
+.header {
+  border-bottom: 1px solid var(--color-grey);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  height: 5.3rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.9rem;
+
+}
+
+.back-btn {
+  margin-right: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50rem;
+  height: 3.4rem;
+  width: 3.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: var(--color-blue-2);
+  }
+}
+
+.icon {
+  height: 2.25rem;
+  width: 2.25rem;
+  fill: var(--color-blue)
+}

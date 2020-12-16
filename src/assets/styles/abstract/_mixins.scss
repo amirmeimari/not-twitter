@@ -1,0 +1,18 @@
+/* 
+  * Display helpers
+  - Device        Code        Range
+  - Extra small   xs          < 600px
+  - Small         sm          600px > < 960px
+*/
+@mixin respond($breakpoint) {
+  @if $breakpoint == xs {
+    @media only screen and (max-width: 600px) {
+      @content;
+    }
+  }
+  @if $breakpoint == sm {
+    @media only screen and (max-width: 960px) {
+      @content;
+    }
+  }
+}
