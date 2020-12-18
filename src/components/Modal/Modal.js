@@ -4,7 +4,7 @@ import Layout from '../Layout/Layout'
 import Header from '../Header/Header'
 
 const Modal = ({ title, children, active }) => {
-  if (active) {
+  if (false) {
     return (
       <div className={classes.overlay}>
         <Layout className={classes.modal}>

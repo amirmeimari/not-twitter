@@ -21,7 +21,7 @@ import { ReactComponent as MessageIcon } from '../../assets/icons/message.svg'
 import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg'
 import { ReactComponent as BookmarkIcon } from '../../assets/icons/bookmark.svg'
 
-const Tweet = ({ reply }) => {
+const Tweet = ({ reply, comment }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null)
 
   const handleUpdateSelected = (emojiId) => {
@@ -92,6 +92,7 @@ const Tweet = ({ reply }) => {
     <section
       className={classNames(classes.tweet, {
         [classes['tweet--reply']]: reply,
+        [classes['tweet--comment']]: comment,
       })}
     >
       <figure className={classes.figure}>
@@ -105,7 +106,13 @@ const Tweet = ({ reply }) => {
           <span className={classes.name}>Amir Meimari 🦊</span>
           <span className={classes.id}>@amir</span>
         </div>
-        <span className={classes.date}>2 days ago</span>
+
+        <div className={classes['details-info']}>
+          {comment ? (
+            <span className={classes['reply-to']}>Replying to @</span>
+          ) : null}
+          <span className={classes.date}>2 days ago</span>
+        </div>
       </div>
 
       <p className={classes.body}>
@@ -116,9 +123,9 @@ const Tweet = ({ reply }) => {
         debitis, velit vitae minus aliquam quo, earum beatae nulla
       </p>
 
-      <Divider className={classes.divider} />
+      {comment ? null : <Divider className={classes.divider} />}
 
-      {reply ? null : actionsElement}
+      {reply || comment ? null : actionsElement}
     </section>
   )
 }

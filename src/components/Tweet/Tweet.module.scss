@@ -25,6 +25,10 @@
   }
 }
 
+.tweet--comment {
+  padding: 2rem var(--space-around);
+}
+
 .figure {
   @extend .figure;
 }
@@ -40,6 +44,11 @@
 }
 
 .author-info {
+  display: flex;
+  align-items: center;
+}
+
+.details-info {
   display: flex;
   align-items: center;
 }
@@ -60,6 +69,12 @@
   grid-column: 2 / -1;
   color: var(--color-grey-3);
   margin-top: 0.7rem;
+}
+
+.reply-to {
+  @extend .date;
+  margin-right: 1.5rem;
+  color: var(--color-blue)
 }
 
 .body {
