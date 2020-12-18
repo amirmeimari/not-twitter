@@ -45,7 +45,21 @@ export const addReaction = (reaction, tweetId) => {
   // add reaction
   tweets[targetTweetIndex].reaction = reaction
 
-  /// update local and state
+  // update local and state
+  localStorage.setItem('tweets', JSON.stringify(tweets))
+  return { type: UPDATE_TWEETS_LIST, tweets }
+}
+
+export const addComment = (comment, tweetId) => {
+  let tweets = [...store.getState().tweets]
+  // find the target tweet
+  const targetTweetIndex = tweets.findIndex(
+    (tweet) => tweet.tweet_id === tweetId,
+  )
+
+  // add comment
+  tweets[targetTweetIndex].comments.unshift(comment)
+  // update local and state
   localStorage.setItem('tweets', JSON.stringify(tweets))
   return { type: UPDATE_TWEETS_LIST, tweets }
 }

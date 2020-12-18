@@ -6,6 +6,7 @@ import {
   updateLoggedUser,
   updateTweetsList,
   addNewTweet,
+  addComment,
 } from '../store/index'
 
 import nanoid from 'nanoid'
@@ -23,10 +24,14 @@ import Modal from '../components/Modal/Modal'
 
 const Home = ({ dispatch, tweets, users, loggedUser }) => {
   const BASE_URL = process.env.REACT_APP_BASE_API_ADDRESS
-  const newTweetRef = useRef();
+  const newTweetRef = useRef()
+  const commentTweetRef = useRef()
 
   const [newTweetText, setNewTweetText] = useState('')
+  const [commentTweetText, setCommentTweetText] = useState('')
   const [loadingNewTweet, setLoadingNewTweet] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [targetTweetToComment, setTargetTweetToComment] = useState(null)
 
   useEffect(() => {
     // fetch users list from API
@@ -34,6 +39,11 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
     handleUpdateLoggedUser()
     fetchTweets()
   }, [])
+
+  useEffect(() => {
+    // watch for changes in targetTweet
+    setIsModalOpen(targetTweetToComment !== null)
+  }, [targetTweetToComment])
 
   const fetchUsersList = async () => {
     try {
@@ -62,21 +72,41 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
     }
   }
 
+  const handleOpenModalComment = (tweet) => {
+    // find and set target value
+    setTargetTweetToComment(tweet)
+  }
+
+  const handleCloseModalComment = () => {
+    setIsModalOpen(false)
+    setTargetTweetToComment(null)
+  }
+
   const renderTweets = tweets.map((tweet) => {
     // get user info
     const user = users.find((user) => user.user_id === tweet.tweet_owner_id)
-    return <Tweet key={tweet.tweet_id} content={{ ...tweet, ...user }} />
+    return (
+      <Tweet
+        key={tweet.tweet_id}
+        content={{ ...tweet, ...user }}
+        onCommentClicked={() => handleOpenModalComment({ ...tweet, ...user })}
+      />
+    )
   })
 
   const handleSetNewTweetText = (v) => {
     setNewTweetText(v)
   }
 
+  const handleSetCommentTweetText = (v) => {
+    setCommentTweetText(v)
+  }
+
   const handleSubmitNewTweet = async () => {
     setLoadingNewTweet(true)
     try {
       // fake server request
-      const {data} = await axios.post(`${BASE_URL}/posts`, {
+      const { data } = await axios.post(`${BASE_URL}/posts`, {
         title: 'new tweet',
         body: newTweetText,
       })
@@ -100,6 +130,35 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
     setLoadingNewTweet(false)
   }
 
+  const handleSubmitNewComment = async () => {
+    setLoadingNewTweet(true)
+    try {
+      // fake server request
+      const { data } = await axios.post(`${BASE_URL}/posts`, {
+        title: 'new tweet',
+        body: commentTweetText,
+      })
+
+      const newComment = {
+        tweet_id: nanoid(),
+        tweet_owner_id: loggedUser.user_id,
+        date: Date.now(),
+        body: data.body,
+        parent_tweet_id: targetTweetToComment.tweet_id
+      }
+
+      dispatch(addComment(newComment, targetTweetToComment.tweet_id))
+      // close modal
+      handleCloseModalComment()
+      // clean up on NewTweet component
+      commentTweetRef.current.cleanUp()
+      // push tweet into state and local storage
+    } catch (e) {
+      console.log(`An error occurred white submitting new comment`, e)
+    }
+    setLoadingNewTweet(false)
+  }
+
   return (
     <>
       <Layout>
@@ -115,9 +174,20 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
 
         {renderTweets}
 
-        <Modal title="Reply">
-          <Tweet reply />
-          <NewTweet reply />
+        <Modal
+          onCloseClicked={() => handleCloseModalComment()}
+          active={isModalOpen}
+          title="Reply"
+        >
+          <Tweet reply content={targetTweetToComment} />
+          <NewTweet
+            ref={commentTweetRef}
+            text={handleSetCommentTweetText}
+            onSubmit={() => handleSubmitNewComment()}
+            loading={loadingNewTweet}
+            avatar={loggedUser.avatar}
+            reply
+          />
         </Modal>
       </Layout>
     </>
