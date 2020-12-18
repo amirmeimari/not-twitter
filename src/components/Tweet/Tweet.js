@@ -47,7 +47,8 @@ const Tweet = ({ reply, comment, onCommentClicked, content, dispatch }) => {
   }
 
   const shareOnSocial = () => {
-    console.log('sharing...')
+    console.log('Haha how funny to share a tweet in not twitter on twitter!')
+    window.open(`https://twitter.com/intent/tweet?text=${content.body} - Via Not Twitter 😃`)
   }
 
   const shareItems = [
