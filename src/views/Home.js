@@ -1,11 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import {
   updateUsersList,
   updateLoggedUser,
   updateTweetsList,
+  addNewTweet,
 } from '../store/index'
+
+import nanoid from 'nanoid'
 
 // local data
 import localUsers from '../data/users.json'
@@ -20,6 +23,10 @@ import Modal from '../components/Modal/Modal'
 
 const Home = ({ dispatch, tweets, users, loggedUser }) => {
   const BASE_URL = process.env.REACT_APP_BASE_API_ADDRESS
+  const newTweetRef = useRef();
+
+  const [newTweetText, setNewTweetText] = useState('')
+  const [loadingNewTweet, setLoadingNewTweet] = useState(false)
 
   useEffect(() => {
     // fetch users list from API
@@ -62,11 +69,35 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
   })
 
   const handleSetNewTweetText = (v) => {
-    console.log(v)
+    setNewTweetText(v)
   }
 
-  const handleSubmitNewTweet = () => {
-    console.log('wdawd')
+  const handleSubmitNewTweet = async () => {
+    setLoadingNewTweet(true)
+    try {
+      // fake server request
+      const {data} = await axios.post(`${BASE_URL}/posts`, {
+        title: 'new tweet',
+        body: newTweetText,
+      })
+
+      const newTweet = {
+        id: nanoid(),
+        userId: loggedUser.id,
+        date: Date.now(),
+        body: data.body,
+        reaction: null,
+        comments: [],
+      }
+
+      dispatch(addNewTweet(newTweet))
+      // clean up on NewTweet component
+      newTweetRef.current.cleanUp()
+      // push tweet into state and local storage
+    } catch (e) {
+      console.log(`An error occurred white sending new tweet`, e)
+    }
+    setLoadingNewTweet(false)
   }
 
   return (
@@ -74,9 +105,11 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
       <Layout>
         <Header title="Home" />
         <NewTweet
+          ref={newTweetRef}
           text={handleSetNewTweetText}
           onSubmit={() => handleSubmitNewTweet()}
           avatar={loggedUser.avatar}
+          loading={loadingNewTweet}
         />
         <Divider big />
 

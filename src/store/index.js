@@ -1,3 +1,5 @@
+import { store } from '../index'
+
 const initState = {
   users: [],
   loggedUser: [],
@@ -24,13 +26,15 @@ export const updateLoggedUser = (loggedUser) => {
 
 export const updateTweetsList = (tweetsList) => {
   const tweets = handleUpdateLocal('tweets', tweetsList)
-  console.log('from state', tweets)
   return { type: UPDATE_TWEETS_LIST, tweets }
 }
 
-export const addTweet = () => {
-
-} 
+export const addNewTweet = (newTweet) => {
+  let tweets = [...store.getState().tweets]
+  tweets.push(newTweet)
+  tweets = handleUpdateLocal('tweets', tweets)
+  return { type: UPDATE_TWEETS_LIST, tweets }
+}
 
 // Reducers
 const rootReducer = (state = initState, action) => {
@@ -63,6 +67,8 @@ const handleUpdateLocal = (kind, list) => {
     })
 
     // update local storage
+    console.log(kind);
+    console.log(localList);
     localStorage.setItem(kind, JSON.stringify(localList))
   } else {
     // create users in local storage

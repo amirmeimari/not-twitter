@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, forwardRef, useImperativeHandle } from 'react'
 
 import classes from './NewTweet.module.scss'
 import classNames from 'classnames'
@@ -7,24 +7,34 @@ import TextField from '../TextField/TextField'
 import Button from '../Button/Button'
 import Divider from '../Divider/Divider'
 
-const NewTweet = ({ reply, text, onSubmit, avatar }) => {
+const NewTweet = forwardRef((props, ref) => {
   const [value, setValue] = useState('')
+
+  useImperativeHandle(ref, () => ({
+    cleanUp() {
+      setValue('')
+    },
+  }))
 
   const handleInputChange = (e) => {
     setValue(e.target.value)
-    text(e.target.value)
+    props.text(e.target.value)
   }
 
   return (
     <section
       className={classNames(classes.tweet, {
-        [classes['tweet--reply']]: reply,
+        [classes['tweet--reply']]: props.reply,
       })}
     >
       <figure className={classes.figure}>
         <img
           className={classes.avatar}
-          src={avatar ? require(`../../assets/images/${avatar}`).default : null}
+          src={
+            props.avatar
+              ? require(`../../assets/images/${props.avatar}`).default
+              : null
+          }
           alt="amir meimari"
         />
       </figure>
@@ -32,16 +42,17 @@ const NewTweet = ({ reply, text, onSubmit, avatar }) => {
       <TextField
         onChange={handleInputChange}
         value={value}
-        placeholder={reply ? 'Tweet your reply' : "What's Happening?"}
+        disabled={props.loading}
+        placeholder={props.reply ? 'Tweet your reply' : "What's Happening?"}
       />
 
       <Divider className={classes.divider} />
 
-      <Button className={classes.button} onClick={onSubmit}>
-        {reply ? 'Reply' : 'Tweet'}
+      <Button loading={props.loading} className={classes.button} onClick={props.onSubmit}>
+        {props.reply ? 'Reply' : 'Tweet'}
       </Button>
     </section>
   )
-}
+})
 
 export default NewTweet
