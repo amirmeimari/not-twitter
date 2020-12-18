@@ -111,3 +111,10 @@ const handleUpdateLocal = (kind, list) => {
 
   return localList
 }
+
+export const getTweet = (tweetId) => {
+  return Object.assign(
+    {},
+    [...store.getState().tweets].find((tweet) => tweet.tweet_id == tweetId),
+  )
+}

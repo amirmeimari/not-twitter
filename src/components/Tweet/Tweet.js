@@ -21,7 +21,14 @@ import { ReactComponent as MessageIcon } from '../../assets/icons/message.svg'
 import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg'
 import { ReactComponent as BookmarkIcon } from '../../assets/icons/bookmark.svg'
 
-const Tweet = ({ reply, comment, onCommentClicked, content, dispatch }) => {
+const Tweet = ({
+  reply,
+  comment,
+  onCommentClicked,
+  content,
+  dispatch,
+  onClick,
+}) => {
   const handleUpdateSelected = (emojiId) => {
     dispatch(addReaction(emojiId, content.tweet_id))
   }
@@ -48,7 +55,9 @@ const Tweet = ({ reply, comment, onCommentClicked, content, dispatch }) => {
 
   const shareOnSocial = () => {
     console.log('Haha how funny to share a tweet in not twitter on twitter!')
-    window.open(`https://twitter.com/intent/tweet?text=${content.body} - Via Not Twitter 😃`)
+    window.open(
+      `https://twitter.com/intent/tweet?text=${content.body} - Via Not Twitter 😃`,
+    )
   }
 
   const shareItems = [
@@ -72,14 +81,14 @@ const Tweet = ({ reply, comment, onCommentClicked, content, dispatch }) => {
   const actionsElement = (
     <nav className={classes['actions-container']}>
       <ul className={classes.actions}>
-        <li className={classes.action} onClick={onCommentClicked}>
+        <li className={classNames(classes.action, 'comment-action')} onClick={onCommentClicked}>
           <CommentIcon className={classes['action-icon']} />
         </li>
         <ReactionPopup handleUpdateSelected={(v) => handleUpdateSelected(v)}>
-          <li className={classes.action}>{renderedReaction()}</li>
+          <li className={classNames(classes.action, 'reaction-action')}>{renderedReaction()}</li>
         </ReactionPopup>
         <DropDownMenu items={shareItems}>
-          <li className={classes.action}>
+          <li className={classNames(classes.action, 'share-action')}>
             <ShareIcon className={classes['action-icon']} />
           </li>
         </DropDownMenu>
@@ -89,6 +98,7 @@ const Tweet = ({ reply, comment, onCommentClicked, content, dispatch }) => {
 
   return (
     <section
+      onClick={onClick}
       className={classNames(classes.tweet, {
         [classes['tweet--reply']]: reply,
         [classes['tweet--comment']]: comment,

@@ -131,7 +131,7 @@ const ReactionPopup = ({ children, handleUpdateSelected }) => {
   })
 
   return (
-    <div className={classNames(classes.container)}>
+    <div className={classNames(classes.container, 'reaction-container')}>
       <div
         className={classes['target-element']}
         onMouseEnter={(e) => handleShowReactions(e)}

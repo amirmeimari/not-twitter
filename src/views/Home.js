@@ -1,19 +1,10 @@
 import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import {
-  updateUsersList,
-  updateLoggedUser,
-  updateTweetsList,
-  addNewTweet,
-  addComment,
-} from '../store/index'
+import { addNewTweet, addComment } from '../store/index'
 
 import nanoid from 'nanoid'
-
-// local data
-import localUsers from '../data/users.json'
-import localTweets from '../data/tweets.json'
+import { useHistory } from 'react-router-dom'
 
 import Layout from '../components/Layout/Layout'
 import Header from '../components/Header/Header'
@@ -26,6 +17,7 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
   const BASE_URL = process.env.REACT_APP_BASE_API_ADDRESS
   const newTweetRef = useRef()
   const commentTweetRef = useRef()
+  const history = useHistory()
 
   const [newTweetText, setNewTweetText] = useState('')
   const [commentTweetText, setCommentTweetText] = useState('')
@@ -34,43 +26,11 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
   const [targetTweetToComment, setTargetTweetToComment] = useState(null)
 
   useEffect(() => {
-    // fetch users list from API
-    fetchUsersList()
-    handleUpdateLoggedUser()
-    fetchTweets()
-  }, [])
-
-  useEffect(() => {
     // watch for changes in targetTweet
     setIsModalOpen(targetTweetToComment !== null)
+
+    return () => {}
   }, [targetTweetToComment])
-
-  const fetchUsersList = async () => {
-    try {
-      // fake fetch request
-      await axios.get(`${BASE_URL}/users/`)
-      // update users list with local data
-      dispatch(updateUsersList(localUsers))
-    } catch (e) {
-      console.log(`An error occurred white fetching users list`, e)
-    }
-  }
-
-  const handleUpdateLoggedUser = () => {
-    // in real cases logged user should be fetch and authenticated even before app loaded, for example after login, but here it's not the case so i will not send request, just update local storage and store
-    dispatch(updateLoggedUser(localUsers[0]))
-  }
-
-  const fetchTweets = async () => {
-    try {
-      // fake fetch request
-      await axios.get(`${BASE_URL}/posts/`)
-      // update tweets with local data
-      dispatch(updateTweetsList(localTweets))
-    } catch (e) {
-      console.log(`An error occurred white fetching tweets`, e)
-    }
-  }
 
   const handleOpenModalComment = (tweet) => {
     // find and set target value
@@ -81,18 +41,6 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
     setIsModalOpen(false)
     setTargetTweetToComment(null)
   }
-
-  const renderTweets = tweets.map((tweet) => {
-    // get user info
-    const user = users.find((user) => user.user_id === tweet.tweet_owner_id)
-    return (
-      <Tweet
-        key={tweet.tweet_id}
-        content={{ ...tweet, ...user }}
-        onCommentClicked={() => handleOpenModalComment({ ...tweet, ...user })}
-      />
-    )
-  })
 
   const handleSetNewTweetText = (v) => {
     setNewTweetText(v)
@@ -141,10 +89,11 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
 
       const newComment = {
         tweet_id: nanoid(),
+        user_id: loggedUser.user_id,
         tweet_owner_id: loggedUser.user_id,
         date: Date.now(),
         body: data.body,
-        parent_tweet_id: targetTweetToComment.tweet_id
+        parent_tweet_id: targetTweetToComment.tweet_id,
       }
 
       dispatch(addComment(newComment, targetTweetToComment.tweet_id))
@@ -152,12 +101,41 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
       handleCloseModalComment()
       // clean up on NewTweet component
       commentTweetRef.current.cleanUp()
-      // push tweet into state and local storage
     } catch (e) {
       console.log(`An error occurred white submitting new comment`, e)
     }
     setLoadingNewTweet(false)
   }
+
+  const handleRedirectToDetails = (e, ti) => {
+    const commentAction = e.target.closest('.comment-action')
+    const reactionContainer = e.target.closest('.reaction-container')
+    const reactionAction = e.target.closest('.reaction-action')
+    const shareAction = e.target.closest('.share-action')
+    const dropdownContainer = e.target.closest('.dropdown-container')
+    if (
+      !commentAction &&
+      !reactionAction &&
+      !shareAction &&
+      !reactionContainer &&
+      !dropdownContainer
+    ) {
+      history.push(`/tweet/${ti}`)
+    }
+  }
+
+  const renderTweets = tweets.map((tweet) => {
+    // get user info
+    const user = users.find((user) => user.user_id === tweet.tweet_owner_id)
+    return (
+      <Tweet
+        onClick={(e) => handleRedirectToDetails(e, tweet.tweet_id)}
+        key={tweet.tweet_id}
+        content={{ ...tweet, ...user }}
+        onCommentClicked={() => handleOpenModalComment({ ...tweet, ...user })}
+      />
+    )
+  })
 
   return (
     <>

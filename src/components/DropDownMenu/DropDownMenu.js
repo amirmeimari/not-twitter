@@ -81,7 +81,7 @@ const DropDownMenu = ({ children, items }) => {
   })
 
   return (
-    <div className={classNames(classes.container)}>
+    <div className={classNames(classes.container, 'dropdown-container')}>
       <div
         className={classes['target-element']}
         onMouseEnter={(e) => handleShowItems(e)}
