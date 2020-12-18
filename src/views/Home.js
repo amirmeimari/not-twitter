@@ -64,8 +64,8 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
 
   const renderTweets = tweets.map((tweet) => {
     // get user info
-    const user = users.find((user) => user.id === tweet.userId)
-    return <Tweet key={tweet.id} content={{ ...tweet, ...user }} />
+    const user = users.find((user) => user.user_id === tweet.tweet_owner_id)
+    return <Tweet key={tweet.tweet_id} content={{ ...tweet, ...user }} />
   })
 
   const handleSetNewTweetText = (v) => {
@@ -82,8 +82,8 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
       })
 
       const newTweet = {
-        id: nanoid(),
-        userId: loggedUser.id,
+        tweet_id: nanoid(),
+        tweet_owner_id: loggedUser.user_id,
         date: Date.now(),
         body: data.body,
         reaction: null,

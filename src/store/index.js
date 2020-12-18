@@ -31,8 +31,22 @@ export const updateTweetsList = (tweetsList) => {
 
 export const addNewTweet = (newTweet) => {
   let tweets = [...store.getState().tweets]
-  tweets.push(newTweet)
+  tweets.unshift(newTweet)
   tweets = handleUpdateLocal('tweets', tweets)
+  return { type: UPDATE_TWEETS_LIST, tweets }
+}
+
+export const addReaction = (reaction, tweetId) => {
+  let tweets = [...store.getState().tweets]
+  // find the target tweet
+  const targetTweetIndex = tweets.findIndex(
+    (tweet) => tweet.tweet_id === tweetId,
+  )
+  // add reaction
+  tweets[targetTweetIndex].reaction = reaction
+
+  /// update local and state
+  localStorage.setItem('tweets', JSON.stringify(tweets))
   return { type: UPDATE_TWEETS_LIST, tweets }
 }
 
@@ -60,15 +74,20 @@ const handleUpdateLocal = (kind, list) => {
     // some items are already in local storage
     // check if list are in local, if not update local
     list.forEach((item) => {
-      if (!localList.some((ll) => ll.id === item.id)) {
-        // add to local
-        localList.push(item)
+      if (kind === 'tweets') {
+        if (!localList.some((ll) => ll.tweet_id === item.tweet_id)) {
+          // add to local
+          localList.unshift(item)
+        }
+      } else if (kind === 'users') {
+        if (!localList.some((ll) => ll.user_id === item.user_id)) {
+          // add to local
+          localList.push(item)
+        }
       }
     })
 
     // update local storage
-    console.log(kind);
-    console.log(localList);
     localStorage.setItem(kind, JSON.stringify(localList))
   } else {
     // create users in local storage

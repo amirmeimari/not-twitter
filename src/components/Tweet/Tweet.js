@@ -1,8 +1,8 @@
-import { useState } from 'react'
 import classes from './Tweet.module.scss'
 import classNames from 'classnames'
-
-import moment from 'moment';
+import { connect } from 'react-redux'
+import moment from 'moment'
+import { addReaction } from '../../store/index'
 
 import Divider from '../Divider/Divider'
 import ReactionPopup from '../ReactionPopup/ReactionPopup'
@@ -21,15 +21,13 @@ import { ReactComponent as MessageIcon } from '../../assets/icons/message.svg'
 import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg'
 import { ReactComponent as BookmarkIcon } from '../../assets/icons/bookmark.svg'
 
-const Tweet = ({ reply, comment, onCommentClicked, content }) => {
-  const [selectedEmoji, setSelectedEmoji] = useState(null)
-
+const Tweet = ({ reply, comment, onCommentClicked, content, dispatch }) => {
   const handleUpdateSelected = (emojiId) => {
-    setSelectedEmoji(emojiId)
+    dispatch(addReaction(emojiId, content.tweet_id))
   }
 
   const renderedReaction = () => {
-    switch (selectedEmoji) {
+    switch (content.reaction) {
       case 0:
         return <LaughEmoji className={classes['action-icon']} />
       case 1:
@@ -134,4 +132,4 @@ const Tweet = ({ reply, comment, onCommentClicked, content }) => {
   )
 }
 
-export default Tweet
+export default connect()(Tweet)

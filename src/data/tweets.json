@@ -1,9 +1,9 @@
 [
   {
-    "id": 0,
-    "userId": 1,
+    "tweet_id": 0,
+    "tweet_owner_id": 1,
     "date": 1608301193270,
-    "body": "Yo what up?",
+    "body": "Yo what up? This a sample tweet. try to add a new one!",
     "reaction": null,
     "comments": []
   }
