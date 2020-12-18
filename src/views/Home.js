@@ -13,6 +13,15 @@ const Home = () => {
         <NewTweet />
         <Divider big />
         <Tweet />
+        <Tweet />
+        <Tweet />
+        <Tweet />
+        <Tweet />
+        <Tweet />
+        <Tweet />
+        <Tweet />
+        <Tweet />
+        <Tweet />
         <Modal title="Reply">
           <Tweet reply />
           <NewTweet reply />

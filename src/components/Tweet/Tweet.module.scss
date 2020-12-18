@@ -4,10 +4,10 @@
   @extend .container;
   border-bottom: 1px solid var(--color-grey);
   cursor: pointer;
-  transition: background-color .1s ease-in-out;
+  transition: background-color 0.1s ease-in-out;
 
   &:last-of-type {
-    border-bottom: none
+    border-bottom: none;
   }
 
   &:hover {
@@ -109,7 +109,9 @@
 }
 
 .action-icon {
-  fill: var(--color-white);
+  &:not(fill) {
+    fill: var(--color-white);
+  }
   width: 2rem;
   height: 2rem;
 }

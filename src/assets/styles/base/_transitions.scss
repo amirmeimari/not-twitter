@@ -1,0 +1,29 @@
+.reactions-enter {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(1rem);
+}
+.reactions-enter-active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.reactions-enter-done {
+  opacity: 1;
+  pointer-events: all;
+}
+.reactions-exit {
+  opacity: 1;
+  pointer-events: all;
+}
+.reactions-exit-active {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(1rem);
+  transition: opacity 300ms, transform 300ms;
+}
+.reactions-exit-done {
+  opacity: 0;
+  pointer-events: none;
+}

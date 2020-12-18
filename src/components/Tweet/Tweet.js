@@ -1,24 +1,58 @@
+import { useState } from 'react'
 import classes from './Tweet.module.scss'
 import classNames from 'classnames'
 
 import UserAvatar from '../../assets/images/user-avatar.jpg'
 
 import Divider from '../Divider/Divider'
+import ReactionPopup from '../ReactionPopup/ReactionPopup'
 
 import { ReactComponent as CommentIcon } from '../../assets/icons/comment.svg'
 import { ReactComponent as HeartIcon } from '../../assets/icons/heart.svg'
 import { ReactComponent as ShareIcon } from '../../assets/icons/share.svg'
+import { ReactComponent as AngryEmoji } from '../../assets/icons/dont-mess-with-me-emoji.svg'
+import { ReactComponent as CrazyEmoji } from '../../assets/icons/i-am-crazy-emoji.svg'
+import { ReactComponent as HeartEmoji } from '../../assets/icons/heart-full.svg'
+import { ReactComponent as LaughEmoji } from '../../assets/icons/laugh-emoji.svg'
+import { ReactComponent as NotHappyEmoji } from '../../assets/icons/not-happy-emoji.svg'
+import { ReactComponent as ThumbsUpEmoji } from '../../assets/icons/thumbs-up-emoji.svg'
 
 const Tweet = ({ reply }) => {
+  const [selectedEmoji, setSelectedEmoji] = useState(null)
+
+  const handleUpdateSelected = (emojiId) => {
+    setSelectedEmoji(emojiId)
+  }
+
+  const renderedReaction = () => {
+    switch (selectedEmoji) {
+      case 0:
+        return <LaughEmoji className={classes['action-icon']} />
+      case 1:
+        return <HeartEmoji className={classes['action-icon']} />
+      case 2:
+        return <AngryEmoji className={classes['action-icon']} />
+      case 3:
+        return <CrazyEmoji className={classes['action-icon']} />
+      case 4:
+        return <NotHappyEmoji className={classes['action-icon']} />
+      case 5:
+        return <ThumbsUpEmoji className={classes['action-icon']} />
+
+      default:
+        return <HeartIcon className={classes['action-icon']} />
+    }
+  }
+
   const actionsElement = (
     <nav className={classes['actions-container']}>
       <ul className={classes.actions}>
         <li className={classes.action}>
           <CommentIcon className={classes['action-icon']} />
         </li>
-        <li className={classes.action}>
-          <HeartIcon className={classes['action-icon']} />
-        </li>
+        <ReactionPopup handleUpdateSelected={(v) => handleUpdateSelected(v)}>
+          <li className={classes.action}>{renderedReaction()}</li>
+        </ReactionPopup>
         <li className={classes.action}>
           <ShareIcon className={classes['action-icon']} />
         </li>
@@ -28,7 +62,9 @@ const Tweet = ({ reply }) => {
 
   return (
     <section
-      className={classNames(classes.tweet, { [classes['tweet--reply']]: reply })}
+      className={classNames(classes.tweet, {
+        [classes['tweet--reply']]: reply,
+      })}
     >
       <figure className={classes.figure}>
         <img className={classes.avatar} src={UserAvatar} alt="amir meimari" />
