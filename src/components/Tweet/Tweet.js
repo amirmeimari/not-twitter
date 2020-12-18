@@ -6,6 +6,7 @@ import UserAvatar from '../../assets/images/user-avatar.jpg'
 
 import Divider from '../Divider/Divider'
 import ReactionPopup from '../ReactionPopup/ReactionPopup'
+import DropDownMenu from '../DropDownMenu/DropDownMenu'
 
 import { ReactComponent as CommentIcon } from '../../assets/icons/comment.svg'
 import { ReactComponent as HeartIcon } from '../../assets/icons/heart.svg'
@@ -16,6 +17,9 @@ import { ReactComponent as HeartEmoji } from '../../assets/icons/heart-full.svg'
 import { ReactComponent as LaughEmoji } from '../../assets/icons/laugh-emoji.svg'
 import { ReactComponent as NotHappyEmoji } from '../../assets/icons/not-happy-emoji.svg'
 import { ReactComponent as ThumbsUpEmoji } from '../../assets/icons/thumbs-up-emoji.svg'
+import { ReactComponent as MessageIcon } from '../../assets/icons/message.svg'
+import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg'
+import { ReactComponent as BookmarkIcon } from '../../assets/icons/bookmark.svg'
 
 const Tweet = ({ reply }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null)
@@ -44,6 +48,28 @@ const Tweet = ({ reply }) => {
     }
   }
 
+  const shareOnSocial = () => {
+    console.log('sharing...')
+  }
+
+  const shareItems = [
+    {
+      text: 'Share this post',
+      icon: LinkIcon,
+      action: shareOnSocial,
+    },
+    {
+      text: 'Bookmark',
+      icon: BookmarkIcon,
+      action: null,
+    },
+    {
+      text: 'Send to a friend',
+      icon: MessageIcon,
+      action: null,
+    },
+  ]
+
   const actionsElement = (
     <nav className={classes['actions-container']}>
       <ul className={classes.actions}>
@@ -53,9 +79,11 @@ const Tweet = ({ reply }) => {
         <ReactionPopup handleUpdateSelected={(v) => handleUpdateSelected(v)}>
           <li className={classes.action}>{renderedReaction()}</li>
         </ReactionPopup>
-        <li className={classes.action}>
-          <ShareIcon className={classes['action-icon']} />
-        </li>
+        <DropDownMenu items={shareItems}>
+          <li className={classes.action}>
+            <ShareIcon className={classes['action-icon']} />
+          </li>
+        </DropDownMenu>
       </ul>
     </nav>
   )

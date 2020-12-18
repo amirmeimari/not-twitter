@@ -1,3 +1,4 @@
+// reaction styles
 .reactions-enter {
   opacity: 0;
   pointer-events: none;
@@ -26,4 +27,35 @@
 .reactions-exit-done {
   opacity: 0;
   pointer-events: none;
+}
+
+// drop down styles
+.dropdown-enter {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-1rem) !important;
+}
+.dropdown-enter-active {
+  opacity: 1 !important;
+  pointer-events: all !important;
+  transform: translateY(0) !important;
+  transition: opacity 300ms, transform 300ms !important;
+}
+.dropdown-enter-done {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+.dropdown-exit {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+.dropdown-exit-active {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-1rem) !important;
+  transition: opacity 300ms, transform 300ms !important;
+}
+.dropdown-exit-done {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

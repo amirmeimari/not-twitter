@@ -88,6 +88,10 @@
   & > * + * {
     margin-left: 2rem;
   }
+
+  & > div:nth-child(odd) {
+    margin-left: auto;
+  }
 }
 
 .action {
@@ -98,10 +102,6 @@
   align-items: center;
   cursor: pointer;
   border-radius: 50rem;
-
-  &:last-of-type {
-    margin-left: auto;
-  }
 
   &:hover {
     background-color: var(--color-blue-2);

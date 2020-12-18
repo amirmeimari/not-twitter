@@ -16,12 +16,7 @@ const Home = () => {
         <Tweet />
         <Tweet />
         <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
+
         <Modal title="Reply">
           <Tweet reply />
           <NewTweet reply />
