@@ -2,6 +2,8 @@ import { useState } from 'react'
 import classes from './Tweet.module.scss'
 import classNames from 'classnames'
 
+import moment from 'moment';
+
 import Divider from '../Divider/Divider'
 import ReactionPopup from '../ReactionPopup/ReactionPopup'
 import DropDownMenu from '../DropDownMenu/DropDownMenu'
@@ -119,7 +121,7 @@ const Tweet = ({ reply, comment, onCommentClicked, content }) => {
               Replying to @{content.replyTo}
             </span>
           ) : null}
-          <span className={classes.date}>{content.date}</span>
+          <span className={classes.date}>{moment(content.date).fromNow()}</span>
         </div>
       </div>
 
