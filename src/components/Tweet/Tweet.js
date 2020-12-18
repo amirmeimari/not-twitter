@@ -94,7 +94,15 @@ const Tweet = ({ reply, comment, onCommentClicked, content }) => {
       })}
     >
       <figure className={classes.figure}>
-        <img className={classes.avatar} src={content.avatar} alt="amir meimari" />
+        <img
+          className={classes.avatar}
+          src={
+            content.avatar
+              ? require(`../../assets/images/${content.avatar}`).default
+              : null
+          }
+          alt={content.name}
+        />
       </figure>
 
       {reply ? <div className={classes['reply-connector']} /> : null}
@@ -107,7 +115,9 @@ const Tweet = ({ reply, comment, onCommentClicked, content }) => {
 
         <div className={classes['details-info']}>
           {comment ? (
-            <span className={classes['reply-to']}>Replying to @{content.replyTo}</span>
+            <span className={classes['reply-to']}>
+              Replying to @{content.replyTo}
+            </span>
           ) : null}
           <span className={classes.date}>{content.date}</span>
         </div>
