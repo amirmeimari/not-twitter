@@ -3,11 +3,11 @@ import classes from './Header.module.scss'
 import { ReactComponent as BackIcon } from '../../assets/icons/arrow-left.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg'
 
-const Header = ({ title, back, close }) => {
+const Header = ({ title, back, close, onActionClicked }) => {
   return (
     <header className={classes.header}>
       {back || close ? (
-        <button className={classes.btn}>
+        <button className={classes.btn} onClick={onActionClicked}>
           {back ? (
             <BackIcon className={classes.icon} />
           ) : (

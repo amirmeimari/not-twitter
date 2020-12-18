@@ -2,8 +2,6 @@ import { useState } from 'react'
 import classes from './Tweet.module.scss'
 import classNames from 'classnames'
 
-import UserAvatar from '../../assets/images/user-avatar.jpg'
-
 import Divider from '../Divider/Divider'
 import ReactionPopup from '../ReactionPopup/ReactionPopup'
 import DropDownMenu from '../DropDownMenu/DropDownMenu'
@@ -21,7 +19,7 @@ import { ReactComponent as MessageIcon } from '../../assets/icons/message.svg'
 import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg'
 import { ReactComponent as BookmarkIcon } from '../../assets/icons/bookmark.svg'
 
-const Tweet = ({ reply, comment }) => {
+const Tweet = ({ reply, comment, onCommentClicked, content }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null)
 
   const handleUpdateSelected = (emojiId) => {
@@ -73,7 +71,7 @@ const Tweet = ({ reply, comment }) => {
   const actionsElement = (
     <nav className={classes['actions-container']}>
       <ul className={classes.actions}>
-        <li className={classes.action}>
+        <li className={classes.action} onClick={onCommentClicked}>
           <CommentIcon className={classes['action-icon']} />
         </li>
         <ReactionPopup handleUpdateSelected={(v) => handleUpdateSelected(v)}>
@@ -96,32 +94,26 @@ const Tweet = ({ reply, comment }) => {
       })}
     >
       <figure className={classes.figure}>
-        <img className={classes.avatar} src={UserAvatar} alt="amir meimari" />
+        <img className={classes.avatar} src={content.avatar} alt="amir meimari" />
       </figure>
 
       {reply ? <div className={classes['reply-connector']} /> : null}
 
       <div className={classes['tweet-info']}>
         <div className={classes['author-info']}>
-          <span className={classes.name}>Amir Meimari 🦊</span>
-          <span className={classes.id}>@amir</span>
+          <span className={classes.name}>{content.name}</span>
+          <span className={classes.id}>@{content.username}</span>
         </div>
 
         <div className={classes['details-info']}>
           {comment ? (
-            <span className={classes['reply-to']}>Replying to @</span>
+            <span className={classes['reply-to']}>Replying to @{content.replyTo}</span>
           ) : null}
-          <span className={classes.date}>2 days ago</span>
+          <span className={classes.date}>{content.date}</span>
         </div>
       </div>
 
-      <p className={classes.body}>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate
-        doloribus animi eaque quos unde molestias veritatis tempore, nisi
-        quisquam, esse id quibusdam aliquid. Possimus nobis illum error
-        excepturi eaque numquam. Tenetur cum recusandae, reprehenderit quisquam
-        debitis, velit vitae minus aliquam quo, earum beatae nulla
-      </p>
+      <p className={classes.body}>{content.body}</p>
 
       {comment ? null : <Divider className={classes.divider} />}
 

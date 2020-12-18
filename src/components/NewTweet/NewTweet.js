@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import classes from './NewTweet.module.scss'
 import classNames from 'classnames'
 
@@ -6,7 +8,14 @@ import TextField from '../TextField/TextField'
 import Button from '../Button/Button'
 import Divider from '../Divider/Divider'
 
-const NewTweet = ({ reply }) => {
+const NewTweet = ({ reply, text, onSubmit }) => {
+  const [value, setValue] = useState('')
+
+  const handleInputChange = (e) => {
+    setValue(e.target.value)
+    text(e.target.value)
+  }
+
   return (
     <section
       className={classNames(classes.tweet, {
@@ -17,11 +26,15 @@ const NewTweet = ({ reply }) => {
         <img className={classes.avatar} src={UserAvatar} alt="amir meimari" />
       </figure>
 
-      <TextField placeholder={reply ? 'Tweet your reply' : 'What\'s Happening?'} />
+      <TextField
+        onChange={handleInputChange}
+        value={value}
+        placeholder={reply ? 'Tweet your reply' : "What's Happening?"}
+      />
 
       <Divider className={classes.divider} />
 
-      <Button className={classes.button}>{reply ? 'Reply' : 'Tweet'}</Button>
+      <Button className={classes.button} onClick={onSubmit}>{reply ? 'Reply' : 'Tweet'}</Button>
     </section>
   )
 }

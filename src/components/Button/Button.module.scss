@@ -14,12 +14,15 @@
     background-color: var(--color-blue-3);
   }
 
-  &:focus {
+  &:active {
     outline: none;
     background-color: var(--color-blue-3);
   }
-}
 
+  &:focus {
+    outline: none;
+  }
+}
 
 .disabled {
   cursor: not-allowed;
