@@ -2,6 +2,9 @@
   {
     "tweet_id": 0,
     "tweet_owner_id": 1,
+    "tweet_owner_name": "Amir The Breaker ⚡",
+    "tweet_owner_avatar": "default-avatar.jpg",
+    "tweet_owner_username": "jack",
     "date": 1608301193270,
     "body": "Yo what up? This a sample tweet. try to add a new one!",
     "reaction": null,

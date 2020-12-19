@@ -108,11 +108,11 @@ const Tweet = ({
         <img
           className={classes.avatar}
           src={
-            content.avatar
-              ? require(`../../assets/images/${content.avatar}`).default
+            content.tweet_owner_avatar
+              ? require(`../../assets/images/${content.tweet_owner_avatar}`).default
               : null
           }
-          alt={content.name}
+          alt={content.tweet_owner_name}
         />
       </figure>
 
@@ -120,8 +120,8 @@ const Tweet = ({
 
       <div className={classes['tweet-info']}>
         <div className={classes['author-info']}>
-          <span className={classes.name}>{content.name}</span>
-          <span className={classes.id}>@{content.username}</span>
+          <span className={classes.name}>{content.tweet_owner_name}</span>
+          <span className={classes.id}>@{content.tweet_owner_username}</span>
         </div>
 
         <div className={classes['details-info']}>

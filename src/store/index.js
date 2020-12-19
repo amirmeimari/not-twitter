@@ -57,6 +57,8 @@ export const addComment = (comment, tweetId) => {
     (tweet) => tweet.tweet_id === tweetId,
   )
 
+  // add reply to
+  comment.replyTo = tweets[targetTweetIndex].tweet_owner_username
   // add comment
   tweets[targetTweetIndex].comments.unshift(comment)
   // update local and state

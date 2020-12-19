@@ -13,10 +13,11 @@ import Divider from '../components/Divider/Divider'
 import Tweet from '../components/Tweet/Tweet'
 import Modal from '../components/Modal/Modal'
 
-const Home = ({ dispatch, tweets, users, loggedUser }) => {
+const Home = ({ dispatch, tweets, loggedUser }) => {
   const BASE_URL = process.env.REACT_APP_BASE_API_ADDRESS
   const history = useHistory()
   const { id } = useParams()
+  const cancelFetchTweet = axios.CancelToken.source()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [tweetDetails, setTweetDetails] = useState(null)
@@ -26,45 +27,28 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
   useEffect(() => {
     // get details from fake server
     if (tweets.length > 0) {
-      console.log('awdawd');
       fetchTweet()
     }
 
-    return () => {}
+    return () => {
+      cancelFetchTweet.cancel()
+    }
   }, [tweets])
 
   const fetchTweet = async () => {
     try {
       // fake fetch request
-      await axios.get(`${BASE_URL}/users/`)
+      await axios.get(`${BASE_URL}/users/`, {
+        CancelToken: cancelFetchTweet.token,
+      })
       // update users list with local data
       // get user info
 
-      setTweetDetails(getAndFormatData())
+      const detailTweet = getTweet(id)
+      setTweetDetails({ ...detailTweet })
     } catch (e) {
       console.log(`An error occurred white fetching users list`, e)
     }
-  }
-
-  const getAndFormatData = () => {
-    const detailTweet = getTweet(id)
-
-    const user = users.find(
-      (user) => user.user_id === detailTweet.tweet_owner_id,
-    )
-    detailTweet?.comments.forEach((comment) => {
-      // find and get the user that left the comment
-      const userComment = users.find((user) => user.user_id === comment.user_id)
-      if (userComment) {
-        comment.avatar = user.avatar
-        comment.name = user.name
-        comment.user_id = user.user_id
-        comment.username = user.username
-        comment.replyTo = user.username
-      }
-    })
-
-    return { ...detailTweet, ...user }
   }
 
   const handleToggleModalComment = () => {
@@ -86,8 +70,10 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
 
       const newComment = {
         tweet_id: nanoid(),
-        user_id: loggedUser.user_id,
         tweet_owner_id: loggedUser.user_id,
+        tweet_owner_name: loggedUser.name,
+        tweet_owner_avatar: loggedUser.avatar,
+        tweet_owner_username: loggedUser.username,
         date: Date.now(),
         body: data.body,
         parent_tweet_id: tweetDetails.tweet_id,
@@ -96,9 +82,6 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
       dispatch(addComment(newComment, tweetDetails.tweet_id))
       // close modal
       handleToggleModalComment()
-      // format and get latest data
-      // setTweetDetails(getAndFormatData())
-      // clean up on NewTweet component
     } catch (e) {
       console.log(`An error occurred white submitting new comment`, e)
     }
@@ -143,7 +126,6 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
 const mapStateToProps = (state) => {
   return {
     tweets: state.tweets,
-    users: state.users,
     loggedUser: state.loggedUser,
   }
 }

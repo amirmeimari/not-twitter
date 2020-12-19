@@ -17,6 +17,8 @@ import localTweets from './data/tweets.json'
 
 const App = ({ dispatch }) => {
   const BASE_URL = process.env.REACT_APP_BASE_API_ADDRESS
+  const cancelFetchUsersList = axios.CancelToken.source()
+  const cancelFetchTweets = axios.CancelToken.source()
 
   useEffect(() => {
     // fetch users list from API
@@ -24,13 +26,18 @@ const App = ({ dispatch }) => {
     handleUpdateLoggedUser()
     fetchTweets()
 
-    return () => {}
+    return () => {
+      cancelFetchUsersList.cancel()
+      cancelFetchTweets.cancel()
+    }
   }, [])
 
   const fetchUsersList = async () => {
     try {
       // fake fetch request
-      await axios.get(`${BASE_URL}/users/`)
+      await axios.get(`${BASE_URL}/users/`, {
+        CancelToken: cancelFetchUsersList.token,
+      })
       // update users list with local data
       dispatch(updateUsersList(localUsers))
     } catch (e) {
@@ -46,7 +53,9 @@ const App = ({ dispatch }) => {
   const fetchTweets = async () => {
     try {
       // fake fetch request
-      await axios.get(`${BASE_URL}/posts/`)
+      await axios.get(`${BASE_URL}/posts/`, {
+        CancelToken: cancelFetchTweets.token,
+      })
       // update tweets with local data
       dispatch(updateTweetsList(localTweets))
     } catch (e) {

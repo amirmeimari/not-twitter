@@ -13,7 +13,7 @@ import Divider from '../components/Divider/Divider'
 import Tweet from '../components/Tweet/Tweet'
 import Modal from '../components/Modal/Modal'
 
-const Home = ({ dispatch, tweets, users, loggedUser }) => {
+const Home = ({ dispatch, tweets, loggedUser }) => {
   const BASE_URL = process.env.REACT_APP_BASE_API_ADDRESS
   const newTweetRef = useRef()
   const commentTweetRef = useRef()
@@ -62,6 +62,9 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
       const newTweet = {
         tweet_id: nanoid(),
         tweet_owner_id: loggedUser.user_id,
+        tweet_owner_name: loggedUser.name,
+        tweet_owner_avatar: loggedUser.avatar,
+        tweet_owner_username: loggedUser.username,
         date: Date.now(),
         body: data.body,
         reaction: null,
@@ -89,8 +92,10 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
 
       const newComment = {
         tweet_id: nanoid(),
-        user_id: loggedUser.user_id,
         tweet_owner_id: loggedUser.user_id,
+        tweet_owner_name: loggedUser.name,
+        tweet_owner_avatar: loggedUser.avatar,
+        tweet_owner_username: loggedUser.username,
         date: Date.now(),
         body: data.body,
         parent_tweet_id: targetTweetToComment.tweet_id,
@@ -125,14 +130,12 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
   }
 
   const renderTweets = tweets.map((tweet) => {
-    // get user info
-    const user = users.find((user) => user.user_id === tweet.tweet_owner_id)
     return (
       <Tweet
         onClick={(e) => handleRedirectToDetails(e, tweet.tweet_id)}
         key={tweet.tweet_id}
-        content={{ ...tweet, ...user }}
-        onCommentClicked={() => handleOpenModalComment({ ...tweet, ...user })}
+        content={{ ...tweet }}
+        onCommentClicked={() => handleOpenModalComment({ ...tweet })}
       />
     )
   })
@@ -174,7 +177,6 @@ const Home = ({ dispatch, tweets, users, loggedUser }) => {
 
 const mapStateTpProps = (state) => {
   return {
-    users: state.users,
     tweets: state.tweets,
     loggedUser: state.loggedUser,
   }
