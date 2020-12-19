@@ -1,4 +1,5 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
+import { useForm } from 'react-hook-form'
 
 import classes from './NewTweet.module.scss'
 import classNames from 'classnames'
@@ -8,6 +9,7 @@ import Button from '../Button/Button'
 import Divider from '../Divider/Divider'
 
 const NewTweet = forwardRef((props, ref) => {
+  const { register, handleSubmit, errors } = useForm()
   const [value, setValue] = useState('')
 
   useImperativeHandle(ref, () => ({
@@ -40,15 +42,25 @@ const NewTweet = forwardRef((props, ref) => {
       </figure>
 
       <TextField
+        register={register({ required: true, minLength: 5 })}
+        name="newTweetTextarea"
         onChange={handleInputChange}
         value={value}
         disabled={props.loading}
         placeholder={props.reply ? 'Tweet your reply' : "What's Happening?"}
       />
+      <span className={classes['error-message']}>
+        {errors.newTweetTextarea && 'Please enter at least 5 characters'}
+      </span>
 
       <Divider className={classes.divider} />
 
-      <Button loading={props.loading} className={classes.button} onClick={props.onSubmit}>
+      <Button
+        loading={props.loading}
+        disabled={errors.newTweetTextarea}
+        className={classes.button}
+        onClick={handleSubmit(props.onSubmit)}
+      >
         {props.reply ? 'Reply' : 'Tweet'}
       </Button>
     </section>

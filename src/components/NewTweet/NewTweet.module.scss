@@ -22,6 +22,13 @@
   margin: 1rem 0;
 }
 
+.error-message {
+  grid-column: 2 / -1;
+  color: var(--color-red);
+  font-size: 1.4rem;;
+  min-height: 1.6rem;
+}
+
 .button {
   grid-column: 2 / -1;
   max-width: fit-content;
